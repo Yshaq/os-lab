@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <ctype.h>
 
 #define MAX_N 90
 
@@ -20,14 +21,25 @@ void *runner(void *param) {
 	pthread_exit(0);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+
+	if(argc != 2) {
+        printf("exactly one parameter (integer) required\n");
+        return 0;
+    }
+
+    char* s = argv[1];
+    for(int i=0; s[i]!='\0'; i++) {
+        if(!isdigit(s[i])) {
+            printf("Please enter valid positive integer\n");
+            return 0;
+        }
+    }
+
+    int n = atoi(s);
 
 	pthread_t tid;
 	pthread_attr_t attr;
-
-    int n;
-    printf("enter number of numbers(n): ");
-    scanf("%d", &n);
 
 	// init thread with default attributes.
 	pthread_attr_init(&attr);
